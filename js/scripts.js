@@ -33,34 +33,68 @@ function generateGallery(people){
  modalCards
  ***/
 
-function modalCards(people) {
-    let cards = document.getElementsByClassName('card');
-    for (let i = 0; i < cards.length; i++) 
-        {cards[i].addEventListener('click', ()=>{
-            body.insertAdjacentHTML('beforeend', `
-            <div class="modal-container">
-                    <div class="modal">
-                        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-                        <div class="modal-info-container">
-                            <img class="modal-img" src="${people[i].picture.large}" alt="profile picture">
-                            <h3 id="${people[i].name.first}${people[i].name.last}" class="modal-name cap">${people[i].name.first} ${people[i].name.last}</h3>
-                            <p class="modal-text">${people[i].email}</p>
-                            <p class="modal-text cap">${people[i].location.city}</p>
-                            <hr>
-                            <p class="modal-text">${people[i].cell}</p>
-                            <p class="modal-text">123 Portland Ave., ${people[i].location.city}, OR ${people[i].location.postcode}</p>
-                            <p class="modal-text">Birthday: 10/21/2015</p>
-                        </div>
+function generateModals(people){ 
+    const modals = people.map(
+        person => {
+        let modalHTML = `<div class="modal-container">
+            <div class="modal">
+                <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+                <div class="modal-info-container">
+                    <img class="modal-img" src="${person.picture.large}" alt="profile picture">
+                    <h3 id="${person.name.first}${person.name.last}" class="modal-name cap">${person.name.first} ${person.name.last}</h3>
+                    <p class="modal-text">${person.email}</p>
+                    <p class="modal-text cap">${person.location.city}</p>
+                    <hr>
+                    <p class="modal-text">${person.cell}</p>
+                    <p class="modal-text">123 Portland Ave., ${person.location.city}, OR ${person.location.postcode}</p>
+                    <p class="modal-text">Birthday: 10/21/2015</p>
             </div>
-        `)  
+        </div>
+            <div class="modal-btn-container">
+                    <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                    <button type="button" id="modal-next" class="modal-next btn">Next</button>
+            </div>
+        </div>`
+        body.insertAdjacentHTML('beforeend', modalHTML)
+    });
+    return people
+}
 
-        /*** the next 3 lines make sure the modals can be closed ***/
-        let modal = document.getElementById('modal-container');
-        let closeModal = document.getElementById('modal-close-btn');
-        closeModal.addEventListener('click', ()=>{body.removeChild(body.lastElementChild)})
-        })}
-        return people
-    }
+
+/***
+show and hide modals
+***/
+
+function showModals(people) {
+    let cards = document.getElementsByClassName('card');
+    let modals = document.getElementsByClassName('modal-container');
+    let closeModals = document.getElementsByClassName('modal-close-btn');
+    let previous = document.getElementsByClassName('modal-prev');
+    let next = document.getElementsByClassName('modal-next');
+    previous[0].style.display = 'none' //removes the previous button on the first modal
+    next[11].style.display = 'none'; //removes the next button on the last modal
+
+    for (let i = 0; i < cards.length; i++) 
+            {
+                modals[i].style.display = 'none'; //hides all modals
+                cards[i].addEventListener('click', ()=>{modals[i].style.display = 'block'}); //shows the modal
+                closeModals[i].addEventListener('click', ()=>{modals[i].style.display = 'none'}) //hides the modal again
+                next[i].addEventListener('click', ()=>{
+                    if (i < 11){
+                    modals[i].style.display = 'none';
+                    modals[i+1].style.display = 'block' //shows the next modal
+                    }
+                })
+                previous[i].addEventListener('click', ()=>{
+                    if (i > 0){
+                    modals[i].style.display = 'none';
+                    modals[i-1].style.display = 'block'}//shows the previous modalsy 
+                    
+                })
+                }
+    return people
+} 
+
 
 /***
 search feature
@@ -82,7 +116,6 @@ function searchFeature(people){
         generateGallery(searchResults)
             }
         )
-        
 }
 
 /***
@@ -93,7 +126,9 @@ fetch(url)
         .then(response => response.json())
         .then(responseJson => responseJson.results)
         .then(people => generateGallery(people))
-        .then(people => modalCards(people))
+        .then(people => generateModals(people))
         .then(people => searchFeature(people))
+        .then(people => showModals(people))
+        
 
 

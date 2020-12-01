@@ -71,8 +71,8 @@ function showModals(people) {
     let closeModals = document.getElementsByClassName('modal-close-btn');
     let previous = document.getElementsByClassName('modal-prev');
     let next = document.getElementsByClassName('modal-next');
-    previous[0].style.display = 'none' //removes the previous button on the first modal
-    next[11].style.display = 'none'; //removes the next button on the last modal
+    previous[0].style.display = 'none'; //removes the previous button on the first modal
+    next[cards.length-1].style.display = 'none'; //removes the next button on the last modal
 
     for (let i = 0; i < cards.length; i++) 
             {
@@ -80,17 +80,14 @@ function showModals(people) {
                 cards[i].addEventListener('click', ()=>{modals[i].style.display = 'block'}); //shows the modal
                 closeModals[i].addEventListener('click', ()=>{modals[i].style.display = 'none'}) //hides the modal again
                 next[i].addEventListener('click', ()=>{
-                    if (i < 11){
                     modals[i].style.display = 'none';
                     modals[i+1].style.display = 'block' //shows the next modal
-                    }
                 })
                 previous[i].addEventListener('click', ()=>{
-                    if (i > 0){
                     modals[i].style.display = 'none';
-                    modals[i-1].style.display = 'block'}//shows the previous modalsy 
-                    
-                })
+                    modals[i-1].style.display = 'block'; //shows the previous modals
+                }
+                )
                 }
     return people
 } 
@@ -113,7 +110,8 @@ function searchFeature(people){
     searchSubmit.addEventListener('click', ()=>{
         gallery.innerHTML = '';
         const searchResults = people.filter(person => person.name.first.includes(searchPeople.value) || person.name.last.includes(searchPeople.value));
-        generateGallery(searchResults)
+        generateGallery(searchResults);
+        showModals(searchResults);
             }
         )
 }
@@ -127,8 +125,8 @@ fetch(url)
         .then(responseJson => responseJson.results)
         .then(people => generateGallery(people))
         .then(people => generateModals(people))
-        .then(people => searchFeature(people))
         .then(people => showModals(people))
+        .then(people => searchFeature(people))
         
 
 

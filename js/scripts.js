@@ -15,9 +15,10 @@ dynamically generated HTML
 ***/
 
 function generateGallery(people){
+/*** iterates over the array of user objects to build each card */
          const profiles = people.map(
-            person => {//iterates over the array of user objects
-                let cardHTML = `<div class="card">
+            person => {
+                const cardHTML = `<div class="card">
                                 <div class="card-img-container">
                                 <img class="card-img" src="${person.picture.large}" alt="profile picture"></div>
                                 <div class="card-info-container">
@@ -34,17 +35,23 @@ function generateGallery(people){
  modalCards
  ***/
 
- /*** helper function to format phone number ***/
- function usFormat(phone){
+/*** helper function to format phone number ***/
+function usFormat(phone){
     phone = phone.replace(/[^\d]/g, "");
     return phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
  }
+
+/*** helper function to format date of birth ***/
+function usStyle(dateOfBirth){
+    dateOfBirth = dateOfBirth.replace(/[^\d]/g, "");
+    return dateOfBirth.replace(/(\d{4})(\d{2})(\d{2})/, "$1/$2/$3").slice(0,10)
+}
 
 /*** function to actually build the modal ***/
 function generateModals(people){ 
     const modals = people.map(
         person => {
-        let modalHTML = `<div class="modal-container">
+        const modalHTML = `<div class="modal-container">
             <div class="modal">
                 <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
                 <div class="modal-info-container">
@@ -54,8 +61,8 @@ function generateModals(people){
                     <p class="modal-text cap">${person.location.city}</p>
                     <hr>
                     <p class="modal-text">${usFormat(person.cell)}</p>
-                    <p class="modal-text">123 Portland Ave., ${person.location.city}, OR ${person.location.postcode}</p>
-                    <p class="modal-text">Birthday: 10/21/2015</p>
+                    <p class="modal-text">${person.location.street.number} ${person.location.street.name}, ${person.location.city}, OR ${person.location.postcode}</p>
+                    <p class="modal-text">${usStyle(person.dob.date)}</p>
             </div>
             </div>
                 <div class="modal-btn-container">
@@ -75,11 +82,11 @@ show and hide modals
 ***/
 
 function showModals(people) {
-    let cards = document.getElementsByClassName('card');
-    let modals = document.getElementsByClassName('modal-container');
-    let closeModals = document.getElementsByClassName('modal-close-btn');
-    let previous = document.getElementsByClassName('modal-prev');
-    let next = document.getElementsByClassName('modal-next');
+    const cards = document.getElementsByClassName('card');
+    const modals = document.getElementsByClassName('modal-container');
+    const closeModals = document.getElementsByClassName('modal-close-btn');
+    const previous = document.getElementsByClassName('modal-prev');
+    const next = document.getElementsByClassName('modal-next');
     
     previous[0].style.display = 'none'; //removes the previous button on the first modal
     next[cards.length-1].style.display = 'none'; //removes the next button on the last modal
@@ -107,6 +114,8 @@ function showModals(people) {
 search feature
 ***/
 
+
+/*** inserts necessary html***/
 searchContainer.insertAdjacentHTML('beforeend', `
     <form action="#" method="get">
         <input type="search" id="search-input" class="search-input" placeholder="Search...">

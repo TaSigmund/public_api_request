@@ -44,7 +44,7 @@ function usFormat(phone){
 /*** helper function to format date of birth ***/
 function usStyle(dateOfBirth){
     dateOfBirth = dateOfBirth.replace(/[^\d]/g, "");
-    return dateOfBirth.replace(/(\d{4})(\d{2})(\d{2})/, "$1/$2/$3").slice(0,10)
+    return dateOfBirth.replace(/(\d{4})(\d{2})(\d{2})/, "$2/$3/$1").slice(0,10)
 }
 
 /*** function to actually build the modal ***/
@@ -62,7 +62,7 @@ function generateModals(people){
                     <hr>
                     <p class="modal-text">${usFormat(person.cell)}</p>
                     <p class="modal-text">${person.location.street.number} ${person.location.street.name}, ${person.location.city}, OR ${person.location.postcode}</p>
-                    <p class="modal-text">${usStyle(person.dob.date)}</p>
+                    <p class="modal-text">Birthday: ${usStyle(person.dob.date)}</p>
             </div>
             </div>
                 <div class="modal-btn-container">

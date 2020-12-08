@@ -26,7 +26,7 @@ function generateGallery(people){
                 gallery.insertAdjacentHTML('beforeend', cardHTML)
             }
         )
-        return people
+return people
 }
 
 /*** 
@@ -71,9 +71,8 @@ function generateModals(people){
         body.insertAdjacentHTML('beforeend', modalHTML)
         }
     );
-    return people
+return people
 }
-
 
 /***
 show and hide modals
@@ -86,8 +85,8 @@ function showModals(people) {
     let previous = document.getElementsByClassName('modal-prev');
     let next = document.getElementsByClassName('modal-next');
     
-    previous[0].style.display = 'none'; //removes the previous button on the first modal
-    next[cards.length-1].style.display = 'none'; //removes the next button on the last modal
+    if (previous[0]) {previous[0].style.display = 'none';} //removes the previous button on the first modal
+    if (cards.length > 0) {next[cards.length-1].style.display = 'none';} //removes the next button on the last modal
 
     for (let i = 0; i < cards.length; i++) 
             {
@@ -110,11 +109,9 @@ function showModals(people) {
     return people
 } 
 
-
 /***
 search feature
 ***/
-
 
 /*** inserts necessary html***/
 searchContainer.insertAdjacentHTML('beforeend', `
@@ -127,16 +124,19 @@ searchContainer.insertAdjacentHTML('beforeend', `
 function searchFeature(people){
     const searchPeople = document.getElementsByClassName('search-input')[0];
     const searchSubmit = document.getElementsByClassName('search-submit')[0];
-    searchSubmit.addEventListener('click', ()=>{
+
+    function performSearch() {
         gallery.innerHTML = ''; //clears the gallery
         while (body.lastElementChild.className === 'modal-container') {body.removeChild(body.lastElementChild)} //removes the modals
         const searchResults = people.filter(person => person.name.first.includes(searchPeople.value) || person.name.last.includes(searchPeople.value));
         generateGallery(searchResults); // creates a gallery using the filtered results
         generateModals(searchResults); // creates modals using the filtered results
         showModals(searchResults); // allows for modals to be opened
-    })
-
-
+        if (Object.keys(searchResults).length === 0) {headerText.textContent = 'No results found.'} else {headerText.textContent = 'AWESOME STARTUP EMPLOYEE DIRECTORY'}
+    }
+    
+    searchSubmit.addEventListener('click', ()=>{performSearch()}) //search on submit
+    searchPeople.addEventListener('keyup', ()=>{performSearch()}) //live search
 }
 
 /***

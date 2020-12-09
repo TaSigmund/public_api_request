@@ -128,7 +128,7 @@ function searchFeature(people){
     function performSearch() {
         gallery.innerHTML = ''; //clears the gallery
         while (body.lastElementChild.className === 'modal-container') {body.removeChild(body.lastElementChild)} //removes the modals
-        const searchResults = people.filter(person => person.name.first.includes(searchPeople.value) || person.name.last.includes(searchPeople.value));
+        const searchResults = people.filter(person => person.name.first.toUpperCase().includes(searchPeople.value.toUpperCase()) || person.name.last.toUpperCase().includes(searchPeople.value.toUpperCase()));
         generateGallery(searchResults); // creates a gallery using the filtered results
         generateModals(searchResults); // creates modals using the filtered results
         showModals(searchResults); // allows for modals to be opened
